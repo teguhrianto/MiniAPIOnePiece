@@ -1,8 +1,8 @@
 <?php
-// Include necessary classes and traits
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
-var_dump($_SERVER['REQUEST_URI']);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 'on');
+
+// Include autoload or require necessary files
 include './config/config.php';
 include './traits/ValidationTrait.php';
 include './src/Models/CharacterModel.php';
@@ -12,53 +12,99 @@ include './src/Controllers/DevilFruitController.php';
 include './src/Views/JsonView.php';
 
 // Include necessary classes and traits
-use Controllers\CharacterController;
-use Controllers\DevilFruitController;
 use Models\CharacterModel;
 use Models\DevilFruitModel;
+use Controllers\CharacterController;
+use Controllers\DevilFruitController;
 use Views\JsonView;
 
-// Include autoload or require necessary files
-
 // Instantiate CharacterController with CharacterModel
-$characterModel = new CharacterModel($db); // $pdo should be your database connection
+$characterModel = new CharacterModel($db); // $db should be your database connection
 $characterController = new CharacterController($characterModel);
 $devilFruitModel = new DevilFruitModel($db);
 $devilFruitController = new DevilFruitController($devilFruitModel);
 
-// Get the request method and URI
+// Get the request method and param
 $requestMethod = $_SERVER['REQUEST_METHOD'];
-$requestUri = $_SERVER['REQUEST_URI'];
 $requestRoute = $_GET['route'];
 
 // Routes
 if ($requestMethod === 'GET') {
     if ($requestRoute === 'characters') {
-        $characterController->getAllCharacters();
+        $characterController->getAll();
     } elseif ($requestRoute === 'devilfruits') {
-        $devilFruitController->getAllDevilFruits();
+        $devilFruitController->getAll();
     } elseif ($requestRoute === 'character') {
         $id = $_GET['id'];
-        $characterController->getCharacterById($id);
+        $characterController->getById($id);
+    } elseif ($requestRoute === 'devilfruit') {
+        $id = $_GET['id'];
+        $devilFruitController->getById($id);
+    } else {
+        JsonView::render(null, 'One Piece: Kaizoku ou ni ore wa ni naru', 200);
     }
 } elseif ($requestMethod === 'POST') {
     if ($requestRoute === 'characters') {
-        $data = json_decode(file_get_contents("php://input"), true);
-        $characterController->createCharacter($data);
+        // Access form data from $_POST
+        $name = $_POST['name'];
+        $age = $_POST['age'];
+        $devil_fruit_id = $_POST['devil_fruit_id'];
+
+        $data = [
+            'name' => $name,
+            'age' => $age,
+            'devil_fruit_id' => $devil_fruit_id
+        ];
+        $characterController->create($data);
+    } elseif ($requestRoute === 'devilfruits') {
+        // Access form data from $_POST
+        $name = $_POST['name'];
+        $type = $_POST['type'];
+
+        $data = [
+            'name' => $name,
+            'type' => $type
+        ];
+        $devilFruitController->create($data);
+    } else {
+        JsonView::render(null, 'Route not found', 404);
     }
 } elseif ($requestMethod === 'PUT') {
     if ($requestRoute === 'character') {
         $id = $_GET['id'];
-        $data = json_decode(file_get_contents("php://input"), true);
-        $characterController->updateCharacter($id, $data);
+        // Access form data from $_POST
+        $name = $_POST['name'];
+        $age = $_POST['age'];
+        $devil_fruit_id = $_POST['devil_fruit_id'];
+
+        $data = [
+            'name' => $name,
+            'age' => $age,
+            'devil_fruit_id' => $devil_fruit_id
+        ];
+        $characterController->update($id, $data);
+    } elseif ($requestRoute === 'devilfruit') {
+        $id = $_GET['id'];
+        // Access form data from $_POST
+        $name = $_POST['name'];
+        $type = $_POST['type'];
+
+        $devilFruitController->update($id, $data);
+    } else {
+        JsonView::render(null, 'Route not found', 404);
     }
 } elseif ($requestMethod === 'DELETE') {
     if ($requestRoute === 'character') {
         $id = $_GET['id'];
-        $characterController->deleteCharacter($id);
+        $characterController->delete($id);
+    } elseif ($requestRoute === 'devilfruit') {
+        $id = $_GET['id'];
+        $devilFruitController->delete($id);
+    } else {
+        JsonView::render(null, 'Route not found', 404);
     }
 } else {
-    JsonView::render(['error' => 'Route not found'], 404);
+    JsonView::render(null, 'Method not found', 404);
 }
 
 

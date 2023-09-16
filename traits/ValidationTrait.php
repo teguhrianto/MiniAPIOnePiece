@@ -2,6 +2,14 @@
 
 namespace Traits;
 trait ValidationTrait {
+    /**
+     * Validates the character data.
+     *
+     * @param string $name The name of the character.
+     * @param int $age The age of the character.
+     * @param int $devil_fruit_id The ID of the character's devil fruit.
+     * @return mixed[] An array of validation errors.
+     */
     protected function validateCharacterData($name, $age, $devil_fruit_id) {
         $errors = [];
 
@@ -20,6 +28,13 @@ trait ValidationTrait {
         return $errors;
     }
 
+    /**
+     * Validate the Devil Fruit data.
+     *
+     * @param string $name The name of the Devil Fruit
+     * @param string $type The type of the Devil Fruit
+     * @return array An array of validation errors
+     */
     protected function validateDevilFruitData($name, $type) {
         $errors = [];
 

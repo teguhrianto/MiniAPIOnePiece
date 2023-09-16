@@ -1,4 +1,14 @@
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /index.php?route=$1 [QSA,L]
+RewriteBase /
+
+# Map /characters to /?route=characters
+RewriteRule ^characters$ /?route=characters [L]
+
+# Map /character/3 to /?route=character&id=3
+RewriteRule ^character/([0-9]+)$ /?route=character&id=$1 [L]
+
+# Map /devilfruits to /?route=devilfruits
+RewriteRule ^devilfruits$ /?route=devilfruits [L]
+
+# Map /devilfruit/3 to /?route=devilfruit&id=3
+RewriteRule ^devilfruit/([0-9]+)$ /?route=devilfruit&id=$1 [L]

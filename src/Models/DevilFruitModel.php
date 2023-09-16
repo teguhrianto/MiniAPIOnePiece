@@ -75,7 +75,7 @@ class DevilFruitModel {
      */
     public function delete($id) {
         $userQuery = $this->db->prepare("DELETE FROM devil_fruits WHERE id = ?");
-        $userQuery->execute([$id]);
+        return $userQuery->execute([$id]);
     }
 
 }

@@ -79,7 +79,7 @@ class CharacterModel {
      */
     public function delete($id) {
         $userQuery = $this->db->prepare("DELETE FROM characters WHERE id = ?");
-        $userQuery->execute([$id]);
+        return $userQuery->execute([$id]);
     }
 }
 ?>

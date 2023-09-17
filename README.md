@@ -26,7 +26,7 @@ Follow these steps to set up and run the One Piece Mini API on your local machin
 
 1. PHP installed on your system (version 7.4 or higher).
 2. MySQL server installed and running.
-3. Composer installed for managing PHP dependencies.
+3. Web Server installed: e.g. Laragon, MAMP, XAMPP, etc.
 
 ### Installation
 

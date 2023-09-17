@@ -1,8 +1,16 @@
 # Mini API One Piece
 The Mini API One Piece is a simple API that allows you to interact with data related to One Piece characters and Devil Fruits. It provides endpoints for retrieving character details, creating new characters, updating existing ones, managing Devil Fruits, and more.
 
+## Live API
+
+You can access the live API at the following URL:
+
+[https://api-onepiece.teguhrianto.com/](https://api-onepiece.teguhrianto.com/)
+
 ## API Documentation
-For detailed API documentation and endpoint descriptions: [https://teguhrianto.com](https://teguhrianto.com)
+You can access the detailed API documentation and endpoint descriptions here:
+
+[https://teguhrianto.com](https://teguhrianto.com)
 
 ## Tech Stack
 
@@ -24,10 +32,10 @@ Follow these steps to set up and run the One Piece Mini API on your local machin
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/teguhrianto/MiniAPIOnePice.git
+   git clone https://github.com/teguhrianto/MiniAPIOnePiece.git.git
 2.  Change to the project directory:
     ```bash
-    cd one-piece-mini-api
+    cd MiniAPIOnePiece
 3.  Import the database schema by running the SQL script located in the database folder:
 
     ```bash

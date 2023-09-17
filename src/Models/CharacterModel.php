@@ -79,7 +79,14 @@ class CharacterModel {
      */
     public function delete($id) {
         $userQuery = $this->db->prepare("DELETE FROM characters WHERE id = ?");
-        return $userQuery->execute([$id]);
+        $userQuery->execute([$id]);
+
+        // Check if any rows were affected (1 for success, 0 for not found)
+        if ($userQuery->rowCount() === 1) {
+            return true; // Successfully deleted
+        } else {
+            return false; // Devil Fruit not found
+        }
     }
 }
 ?>

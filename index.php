@@ -45,26 +45,10 @@ if ($requestMethod === 'GET') {
     }
 } elseif ($requestMethod === 'POST') {
     if ($requestRoute === 'characters') {
-        // Access form data from $_POST
-        $name = $_POST['name'];
-        $age = $_POST['age'];
-        $devil_fruit_id = $_POST['devil_fruit_id'];
-
-        $data = [
-            'name' => $name,
-            'age' => $age,
-            'devil_fruit_id' => $devil_fruit_id
-        ];
+        $data = json_decode(file_get_contents("php://input"), true);
         $characterController->create($data);
     } elseif ($requestRoute === 'devilfruits') {
-        // Access form data from $_POST
-        $name = $_POST['name'];
-        $type = $_POST['type'];
-
-        $data = [
-            'name' => $name,
-            'type' => $type
-        ];
+        $data = json_decode(file_get_contents("php://input"), true);
         $devilFruitController->create($data);
     } else {
         JsonView::render(null, 'Route not found', 404);
@@ -72,22 +56,11 @@ if ($requestMethod === 'GET') {
 } elseif ($requestMethod === 'PUT') {
     if ($requestRoute === 'character') {
         $id = $_GET['id'];
-        // Access form data from $_POST
-        $name = $_POST['name'];
-        $age = $_POST['age'];
-        $devil_fruit_id = $_POST['devil_fruit_id'];
-
-        $data = [
-            'name' => $name,
-            'age' => $age,
-            'devil_fruit_id' => $devil_fruit_id
-        ];
+        $data = json_decode(file_get_contents("php://input"), true);
         $characterController->update($id, $data);
     } elseif ($requestRoute === 'devilfruit') {
         $id = $_GET['id'];
-        // Access form data from $_POST
-        $name = $_POST['name'];
-        $type = $_POST['type'];
+        $data = json_decode(file_get_contents("php://input"), true);
 
         $devilFruitController->update($id, $data);
     } else {

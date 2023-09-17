@@ -6,7 +6,8 @@ use Traits\ValidationTrait;
 use Models\CharacterModel;
 use Views\JsonView;
 
-class CharacterController {
+class CharacterController
+{
     use ValidationTrait;
 
     private $characterModel;
@@ -16,8 +17,35 @@ class CharacterController {
      *
      * @param CharacterModel $characterModel The character model.
      */
-    public function __construct(CharacterModel $characterModel) {
+    public function __construct(CharacterModel $characterModel)
+    {
         $this->characterModel = $characterModel;
+    }
+
+    /**
+     * Restructures the devil fruit data in the given result array.
+     *
+     * @param array $result The result array containing the devil fruit data.
+     * @return array The modified result array with the devil fruit data restructured.
+     */
+    public function restructureDevilFruitData($result)
+    {
+        if ($result['devil_fruit_id'] !== null) {
+            // Grouping devil fruit columns.
+            $result['devil_fruit'] = [
+                'id' => $result['devil_fruit_id'],
+                'name' => $result['devil_fruit_name'],
+                'type' => $result['devil_fruit_type']
+            ];
+        } else {
+            $result['devil_fruit'] = null;
+        }
+        // Remove redundant devil fruit columns.
+        unset($result['devil_fruit_id']);
+        unset($result['devil_fruit_name']);
+        unset($result['devil_fruit_type']);
+
+        return $result;
     }
 
     /**
@@ -25,10 +53,16 @@ class CharacterController {
      *
      * @return void
      */
-    public function getAll() {
+    public function getAll()
+    {
         $result = $this->characterModel->getAll();
+        // Restructure the devil_fruit data for each character
+        foreach ($result as &$character) {
+            $character = $this->restructureDevilFruitData($character);
+        }
         JsonView::render($result, 'Characters retrieved successfully', 200);
     }
+
 
     /**
      * Retrieves a character from the database by its ID.
@@ -36,24 +70,13 @@ class CharacterController {
      * @param int $id The ID of the character to retrieve.
      * @return void
      */
-    public function getById($id) {
+    public function getById($id)
+    {
         $result = $this->characterModel->getById($id);
         if ($result) {
-            if ($result['devil_fruit_id'] !== null) {
-                // Grouping devil fruit columns.
-                $result['devil_fruit'] = [
-                    'id' => $result['devil_fruit_id'],
-                    'name' => $result['devil_fruit_name'],
-                    'type' => $result['devil_fruit_type']
-                ];
-            } else {
-                $result['devil_fruit'] = null;
-            }
-            // Remove redundant devil fruit columns.
-            unset($result['devil_fruit_id']);
-            unset($result['devil_fruit_name']);
-            unset($result['devil_fruit_type']);
-            
+            // Restructure the devil_fruit data using the reusable function
+            $result = $this->restructureDevilFruitData($result);
+
             JsonView::render($result, 'Character retrieved successfully', 200);
         } else {
             JsonView::render(null, 'Character not found', 404);
@@ -69,7 +92,8 @@ class CharacterController {
      *                    - 'devil_fruit_id': The ID of the devil fruit associated with the character.
      * @return void
      */
-    public function create($data) {
+    public function create($data)
+    {
         $name = $data['name'];
         $age = $data['age'];
         $devil_fruit_id = $data['devil_fruit_id'];
@@ -80,6 +104,8 @@ class CharacterController {
             JsonView::render(null, ['error' => $validationErrors], 400);
         } else {
             $result = $this->characterModel->create($name, $age, $devil_fruit_id);
+            // Restructure the devil_fruit data using the reusable function
+            $result = $this->restructureDevilFruitData($result);
             JsonView::render($result, 'Character created successfully', 200);
         }
     }
@@ -95,7 +121,8 @@ class CharacterController {
      * @throws Error 404 If the character is not found.
      * @return void
      */
-    public function update($id, $data) {
+    public function update($id, $data)
+    {
         $name = $data['name'];
         $age = $data['age'];
         $devil_fruit_id = $data['devil_fruit_id'];
@@ -107,6 +134,8 @@ class CharacterController {
         } else {
             $result = $this->characterModel->update($id, $name, $age, $devil_fruit_id);
             if ($result) {
+                // Restructure the devil_fruit data using the reusable function
+                $result = $this->restructureDevilFruitData($result);
                 JsonView::render($result, 'Character updated successfully', 200);
             } else {
                 JsonView::render(null, 'Character not found', 404);
@@ -121,7 +150,8 @@ class CharacterController {
      * @throws Error 404 If the character is not found.
      * @return void
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->characterModel->delete($id);
         if ($result) {
             JsonView::render(null, 'Character deleted successfully', 200);
@@ -130,4 +160,3 @@ class CharacterController {
         }
     }
 }
-?>

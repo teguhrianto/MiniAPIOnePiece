@@ -24,7 +24,12 @@ class CharacterModel {
      * @return array An array of character data.
      */
     public function getAll() {
-        $userQuery = $this->db->query("SELECT * FROM characters");
+        $query = "SELECT characters.*,
+               devil_fruits.name AS devil_fruit_name,
+               devil_fruits.type AS devil_fruit_type
+        FROM characters
+        LEFT JOIN devil_fruits ON characters.devil_fruit_id = devil_fruits.id";
+        $userQuery = $this->db->query($query);
         return $userQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 

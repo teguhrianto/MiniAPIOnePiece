@@ -39,6 +39,21 @@ class CharacterController {
     public function getById($id) {
         $result = $this->characterModel->getById($id);
         if ($result) {
+            if ($result['devil_fruit_id'] !== null) {
+                // Grouping devil fruit columns.
+                $result['devil_fruit'] = [
+                    'id' => $result['devil_fruit_id'],
+                    'name' => $result['devil_fruit_name'],
+                    'type' => $result['devil_fruit_type']
+                ];
+            } else {
+                $result['devil_fruit'] = null;
+            }
+            // Remove redundant devil fruit columns.
+            unset($result['devil_fruit_id']);
+            unset($result['devil_fruit_name']);
+            unset($result['devil_fruit_type']);
+            
             JsonView::render($result, 'Character retrieved successfully', 200);
         } else {
             JsonView::render(null, 'Character not found', 404);

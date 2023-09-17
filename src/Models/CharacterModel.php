@@ -36,7 +36,14 @@ class CharacterModel {
      * @return array|null Returns an associative array representing the character, or null if no character is found.
      */
     public function getById($id) {
-        $userQuery = $this->db->prepare("SELECT * FROM characters WHERE id = ?");
+        $query = " SELECT characters.*,
+               devil_fruits.name AS devil_fruit_name,
+               devil_fruits.type AS devil_fruit_type
+        FROM characters
+        LEFT JOIN devil_fruits ON characters.devil_fruit_id = devil_fruits.id
+        WHERE characters.id = ?
+        ";
+        $userQuery = $this->db->prepare($query);
         $userQuery->execute([$id]);
         return $userQuery->fetch(PDO::FETCH_ASSOC);
     }
@@ -89,4 +96,3 @@ class CharacterModel {
         }
     }
 }
-?>

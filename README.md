@@ -10,7 +10,7 @@ You can access the live API at the following URL:
 ## API Documentation
 You can access the detailed API documentation and endpoint descriptions here:
 
-[https://teguhrianto.com](https://teguhrianto.com)
+[https://documenter.getpostman.com/view/5968363/2s9YC7Sr79](https://documenter.getpostman.com/view/5968363/2s9YC7Sr79)
 
 ## Tech Stack
 
